@@ -2,18 +2,10 @@ defmodule TeacherWeb.Api.AlbumController do
   use TeacherWeb, :controller
 
   alias Teacher.Recordings
-
-  defp changeset(params) do
-    data = %{}
-    types = %{title: :string, year: :integer, artist: :string}
-
-    {data, types}
-    |> Ecto.Changeset.cast(params, Map.keys(types))
-    |> Ecto.Changeset.validate_length(:title, min: 3)
-  end
+  alias Teacher.Recordings.AlbumSearch
 
   def index(conn, params) do
-    changeset = changeset(params)
+    changeset = AlbumSearch.from(params, with: &AlbumSearch.validator/2)
 
     if changeset.valid? do
       albums = Recordings.album_search(changeset.changes)
