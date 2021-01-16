@@ -8,6 +8,18 @@ defmodule Teacher.Recordings do
 
   alias Teacher.Recordings.{Category, Album}
 
+  def album_search(attrs) do
+    title = get_in(attrs, [:title])
+    year = get_in(attrs, [:year])
+    name = get_in(attrs, [:artist])
+
+    Album
+    |> Album.by_title(title)
+    |> Album.by_year(year)
+    |> Album.by_artist_name(name)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of albums.
 
